@@ -14,12 +14,12 @@ export class Post {
   @Column({ nullable: true })
   mediaUrl: string;
 
-  @ManyToOne(() => User, (user) => user.posts)
+  @ManyToOne(() => User, (user) => user.posts, { cascade: true, eager: true })
   user: User;
 
-  @OneToMany(() => Likes, (like) => like.post)
+  @OneToMany(() => Likes, (like) => like.post, { cascade: true, eager: true })
   likes: Likes[];
 
-  @OneToMany(() => Comment, (comment) => comment.post)
+  @OneToMany(() => Comment, (comment) => comment.post, { cascade: true, eager: true })
   comments: Comment[];
 }

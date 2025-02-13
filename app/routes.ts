@@ -1,12 +1,13 @@
 import express from "express";
+import authRoutes from "./auth/auth.route";
+import userRoutes from "./user/user.route";
+import postRoutes from "./post/post.route";
 
 // routes
 const router = express.Router();
 
-// router.use("/admin", adminRoutes);
-// router.use("/chat", chatRoutes);
-// router.use("/group", groupRoutes);
-// router.use("/auth", authRoutes);
-// router.use("/users", userRoutes);
+router.use("/auth", authRoutes);
+router.use("/user", userRoutes);
+router.use("/post", postRoutes);
 
 export default router;

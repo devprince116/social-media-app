@@ -6,39 +6,47 @@ import asyncHandler from "express-async-handler";
 
 // Extend Request type to include user property
 export interface AuthRequest extends Request {
-  user?: any;
+  user?: User;
 }
-
-const userRepo = AppDataSource.getRepository(User);
 
 //  Authenticate JWT Access Token
 export const authenticate = asyncHandler(
   async (req: AuthRequest, res: Response, next: NextFunction) => {
     const token = req.header("Authorization")?.split(" ")[1];
+    const userRepo = await AppDataSource.getRepository(User);
 
     if (!token) {
-
-      res
-        .status(401)
-        .json({ message: "Token not found", success: false });
+      res.status(401).json({ message: "Token not found", success: false });
       return
     }
 
-    try {
-      const decoded = await jwt.verify(token, process.env.JWT_SECRET!);
-      const user = await userRepo.findOne({ where: { id: (decoded as any).id } });
+    // Verify token
+    const decoded = await jwt.verify(token, process.env.JWT_SECRET!) as { id: number };
+    // console.log(typeof (decoded.id), decoded.id)
 
-      if (!user) {
-        res
-          .status(401)
-          .json({ message: "invalid token", success: false });
-        return
-      }
-
-      req.user = user;
-      next();
-    } catch (err) {
-      res.status(401).json({ message: "Invalid Token", success: false });
+    // Check if decoded data contains 'id'
+    if (!decoded || !decoded.id) {
+      res.status(401).json({ message: "Invalid Token Data", success: false });
+      return
     }
+
+    const userId = Number(decoded.id);
+    if (isNaN(userId)) {
+      res.status(401).json({ message: "Invalid Token Data", success: false });
+      return
+    }
+
+    // Fetch user by ID
+    console.log(decoded.id)
+    const user = await userRepo.findOne({ where: { id: userId } })
+
+    if (!user) {
+      res.status(401).json({ message: "Invalid token - User not found", success: false });
+      return
+    }
+
+    req.user = user; // Attach user to request
+    return next();
+
   }
 );

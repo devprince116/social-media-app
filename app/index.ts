@@ -19,12 +19,6 @@ import { initDb } from "./common/service/database.service"
 //  now create app
 const app = express();
 
-
-
-
-// swagger docs
-setupSwagger(app);
-
 app.use(cors({
     origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE"],
@@ -43,6 +37,7 @@ app.get("/", (req, res) => {
 // now create routes;
 app.use("/api/v1", routes);
 
+setupSwagger(app);
 //  database connection;
 initDb();
 
@@ -52,10 +47,10 @@ const sendmail = async (): Promise<void> => {
 
 // sendmail();
 
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-    console.error("Unhandled Error:", err);
-    res.status(500).json({ message: "Internal Server Error" });
-});
+// app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+//     console.error("Unhandled Error:", err);
+//     res.status(500).json({ message: "Internal Server Error" });
+// });
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

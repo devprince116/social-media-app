@@ -10,9 +10,6 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true })
-  username: string;
-
   @Column()
   email: string;
 
@@ -22,15 +19,15 @@ export class User {
   @OneToMany(() => Post, (post) => post.user)
   posts: Post[];
 
-  @OneToMany(() => Follow, (follow) => follow.follower)
+  @OneToMany(() => Follow, (follow) => follow.follower, { cascade: true, eager: true })
   following: Follow[];
 
-  @OneToMany(() => Follow, (follow) => follow.following)
+  @OneToMany(() => Follow, (follow) => follow.following, { cascade: true, eager: true })
   followers: Follow[];
 
-  @OneToMany(() => Likes, (like) => like.user)
+  @OneToMany(() => Likes, (like) => like.user, { cascade: true, eager: true })
   like: Likes[];
 
-  @OneToMany(() => Comment, (comment) => comment.user)
+  @OneToMany(() => Comment, (comment) => comment.user, { cascade: true, eager: true })
   comments: Comment[];
 }

@@ -8,7 +8,6 @@ export const signupValidator = [
   body("password")
     .isLength({ min: 6 })
     .withMessage("Password must be at least 6 characters"),
-  body("role").isIn(["user", "admin"]).withMessage("Invalid role"),
 ];
 
 /**

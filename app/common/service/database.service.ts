@@ -15,10 +15,10 @@ export const AppDataSource = new DataSource({
   password: PASSWORD,
   database: DATABASE,
   port: 3000,
-  synchronize: false,
+  synchronize: true,
   entities: ["app/common/entity/*.ts"],
-  migrations: ["app/migrations/*.ts"],
-  subscribers: ["app/subscribers/*.ts"],
+  // migrations: ["app/migrations/*.ts"],
+  // subscribers: ["app/subscribers/*.ts"],
 });
 
 export const initDb = async () => {

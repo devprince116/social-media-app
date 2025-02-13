@@ -1,0 +1,15 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3000,
+            "driver": "PostgreSQL",
+            "name": "social-media-app",
+            "database": "social_media",
+            "username": "postgres",
+            "password": "1234",
+            "connectionTimeout": 30
+        }
+    ]
+}

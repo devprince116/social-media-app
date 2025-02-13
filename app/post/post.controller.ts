@@ -7,10 +7,9 @@ import { Post } from "../common/entity/post";
 import { Likes } from "../common/entity/like";
 import { Comment } from "../common/entity/comment";
 import expressAsyncHandler from "express-async-handler";
+import mailSender from "../common/service/mail.service";
+import { sendNotification } from "../common/template/mail.template";
 
-
-// // Setup multer for media uploads
-// const upload = multer({ dest: "uploads/" });
 
 // Create Post Controller
 export const createPost = expressAsyncHandler(async (req: Request, res: Response, next: NextFunction) => {
@@ -25,10 +24,19 @@ export const createPost = expressAsyncHandler(async (req: Request, res: Response
         return
     }
 
+    const email = user.email;
+
     const post = AppDataSource.getRepository(Post).create({ content, mediaUrl, user });
     await AppDataSource.getRepository(Post).save(post);
 
-    res.status(201).json(post);
+    //send mail
+    await mailSender(email, "post-creation mail", sendNotification(email, "post created successfully"))
+
+    res.status(201).json({
+        success: true,
+        data: post,
+        message: "Post ceated successfully and mail sent"
+    });
     return next();
 
 })
@@ -57,9 +65,13 @@ export const likePost = expressAsyncHandler(
         const like = AppDataSource.getRepository(Likes).create({ user, post });
         await AppDataSource.getRepository(Likes).save(like);
 
+        const email = post.user.email;
+
+        await mailSender(email, "post-creation mail", sendNotification(email, "post created successfully"))
+
         res.status(201).json({
             success: true,
-            message: "Post liked successfully",
+            message: "Post liked successfully and mail sent",
             like
         });
         return next();
@@ -82,9 +94,13 @@ export const commentOnPost = expressAsyncHandler(async (req: Request, res: Respo
     const comment = AppDataSource.getRepository(Comment).create({ content, user, post });
     await AppDataSource.getRepository(Comment).save(comment);
 
+    const email = post.user.email;
+
+    await mailSender(email, "post-creation mail", sendNotification(email, "post created successfully"))
+
     res.status(201).json({
         success: true,
-        message: "Commented on post successfully",
+        message: "Commented on post successfully and mail sent",
         comment
     });
     return next();

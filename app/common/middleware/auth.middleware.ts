@@ -37,7 +37,7 @@ export const authenticate = asyncHandler(
     }
 
     // Fetch user by ID
-    console.log(decoded.id)
+    // console.log(decoded.id)
     const user = await userRepo.findOne({ where: { id: userId } })
 
     if (!user) {

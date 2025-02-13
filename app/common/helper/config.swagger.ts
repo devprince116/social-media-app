@@ -2,8 +2,7 @@ import swaggerJsDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { Express } from 'express';
 import { authDocs } from '../../docs/auth.docs';
-import { chatDocs } from '../../docs/chat.docs';
-import { adminDocs } from '../../docs/admin.docs';
+import { userDocs } from '../../docs/user.docs';
 
 // Define Swagger options
 const swaggerOptions: swaggerJsDoc.Options = {
@@ -16,8 +15,7 @@ const swaggerOptions: swaggerJsDoc.Options = {
         },
         paths: {
             ...authDocs,
-            ...adminDocs,
-            ...chatDocs,
+            ...userDocs
         },
         servers: [
             {

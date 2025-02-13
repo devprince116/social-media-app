@@ -14,21 +14,16 @@ export const authDocs = {
                                 email: {
                                     type: 'string',
                                     description: 'The email of the user.',
-                                    example: 'dummy@example.com',
+                                    example: 'test@example.com',
                                 },
                                 password: {
                                     type: 'string',
                                     description: 'The password for the account.',
                                     example: 'password123',
                                 },
-                                role: {
-                                    type: 'string',
-                                    description: 'The email of the user.',
-                                    example: 'admin',
-                                    enum: ['user', 'admin'],
-                                },
+
                             },
-                            required: ['email', 'password', 'role'],
+                            required: ['email', 'password']
                         },
                     },
                 },
@@ -71,7 +66,7 @@ export const authDocs = {
                                 email: {
                                     type: 'string',
                                     description: 'The email of the user.',
-                                    example: 'user@example.com',
+                                    example: 'test@example.com',
                                 },
                                 password: {
                                     type: 'string',

@@ -3,6 +3,8 @@ import { NextFunction, Request, Response } from "express";
 import { User } from "../common/entity/user";
 import { Follow } from "../common/entity/follow";
 import { AppDataSource } from "../common/service/database.service";
+import mailSender from "../common/service/mail.service";
+import { sendNotification } from "../common/template/mail.template";
 
 // Follow user
 export const followUser = expressAsyncHandler(async (req: Request, res: Response, next: NextFunction) => {
@@ -30,9 +32,13 @@ export const followUser = expressAsyncHandler(async (req: Request, res: Response
     const follow = AppDataSource.getRepository(Follow).create({ follower, following });
     await AppDataSource.getRepository(Follow).save(follow);
 
+    const email = following.email
+
+    await mailSender(email, "post-creation mail", sendNotification(email, "post created successfully"))
+
     res.status(201).json({
         success: true,
-        message: "following user",
+        message: "following user and mail sent",
         data: follow
     });
     return next();
@@ -54,7 +60,12 @@ export const unfollowUser = expressAsyncHandler(async (req: Request, res: Respon
         relations: ["follower"]
     });
 
-    res.status(201).json({ success: true, message: "Successfully unfollowed user", data: updatedFollowers });
+    // const email = follow.follower.email
+
+    // await mailSender(email, "post-creation mail", sendNotification(email, "post created successfully"))
+
+
+    res.status(201).json({ success: true, message: "Successfully unfollowed user and mail sent", });
     return next();
 
 })
